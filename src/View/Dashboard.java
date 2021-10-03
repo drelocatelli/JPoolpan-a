@@ -15,11 +15,14 @@ import javax.swing.SpringLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 public class Dashboard extends JFrame {
 
@@ -34,7 +37,7 @@ public class Dashboard extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Dashboard frame = new Dashboard("admin", "009112sp");
+					Dashboard frame = new Dashboard("", "");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,7 +51,7 @@ public class Dashboard extends JFrame {
 	 */
 	public Dashboard(String email, String password) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 733, 539);
+		setBounds(100, 100, 866, 586);
 		contentPane = new JPanel();
 		contentPane.setBackground(config.defaultColor);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,9 +74,11 @@ public class Dashboard extends JFrame {
 		header.setLayout(null);
 		
 		JButton logoutBtn = new JButton("Encerrar sess\u00E3o");
+		logoutBtn.setFont(new Font("Verdana", Font.PLAIN, 11));
 		logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		logoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
 				Main main = new Main();
 				currentFrame.dispose();
 				main.setVisible(true);
@@ -84,6 +89,7 @@ public class Dashboard extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.EAST, logoutBtn, -10, SpringLayout.EAST, contentPane);
 		contentPane.add(logoutBtn);
 		
+		// get all user info
 		String[] userLoggedIn = user.getUserInfo(email, password);
 		
 		JLabel lblNewLabel = new JLabel(String.format("Bem-vindo(a), %s.", userLoggedIn[0]));
@@ -94,12 +100,63 @@ public class Dashboard extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(config.transparency);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, panel, 6, SpringLayout.SOUTH, lblNewLabel);
-		sl_contentPane.putConstraint(SpringLayout.WEST, panel, -23, SpringLayout.WEST, header);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, panel, -6, SpringLayout.NORTH, logoutBtn);
+		sl_contentPane.putConstraint(SpringLayout.WEST, panel, -2, SpringLayout.WEST, header);
+		panel.setBackground(new Color(255,255,255,0));
+		sl_contentPane.putConstraint(SpringLayout.NORTH, panel, 11, SpringLayout.SOUTH, lblNewLabel);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, panel, 67, SpringLayout.SOUTH, lblNewLabel);
 		sl_contentPane.putConstraint(SpringLayout.EAST, panel, 0, SpringLayout.EAST, logoutBtn);
 		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel(String.format("Saldo (R$): %.2f", Double.valueOf(userLoggedIn[1]) ));
+		lblNewLabel_1.setBounds(0, 11, 805, 41);
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1.setFont(new Font("Verdana", Font.PLAIN, 24));
+		lblNewLabel_1.setForeground(Color.WHITE);
+		panel.add(lblNewLabel_1);
+		
+		JPanel panel_1 = new JPanel();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, panel_1, 6, SpringLayout.SOUTH, panel);
+		sl_contentPane.putConstraint(SpringLayout.WEST, panel_1, 5, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, panel_1, -6, SpringLayout.NORTH, logoutBtn);
+		sl_contentPane.putConstraint(SpringLayout.EAST, panel_1, -10, SpringLayout.EAST, contentPane);
+		panel_1.setBackground(config.transparency);
+		contentPane.add(panel_1);
+		SpringLayout sl_panel_1 = new SpringLayout();
+		panel_1.setLayout(sl_panel_1);
+		
+		JButton btnNewButton = new JButton("Recarregar");
+		btnNewButton.setFont(new Font("Verdana", Font.PLAIN, 11));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				currentFrame.dispose();
+				Dashboard dashboard = new Dashboard(email, password);
+				dashboard.setVisible(true);
+			}
+		});
+		sl_panel_1.putConstraint(SpringLayout.NORTH, btnNewButton, 10, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, panel_1);
+		panel_1.add(btnNewButton);
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -6, SpringLayout.NORTH, panel);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, contentPane);
+		
+		JPanel panel_2 = new JPanel();
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 13, SpringLayout.SOUTH, btnNewButton);
+		panel_2.setBackground(new Color(255,255,255,0));
+		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 10, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, -158, SpringLayout.WEST, btnNewButton);
+		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, -6, SpringLayout.WEST, btnNewButton);
+		panel_1.add(panel_2);
+		panel_2.setLayout(null);
+		
+		JButton btnDefinirSaldo = new JButton("Definir saldo");
+		btnDefinirSaldo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnDefinirSaldo.setIcon(new ImageIcon(getClass().getClassLoader().getResource("money_transfer.png")));
+		btnDefinirSaldo.setHorizontalAlignment(SwingConstants.RIGHT);
+		btnDefinirSaldo.setBounds(10, 0, 142, 25);
+		btnDefinirSaldo.setFont(new Font("Verdana", Font.PLAIN, 11));
+		panel_2.add(btnDefinirSaldo);
 		
 	}
 }

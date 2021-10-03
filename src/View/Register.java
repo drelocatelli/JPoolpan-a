@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Controller.ConfigController;
+import Controller.RegisterController;
 import Controller.UsersController;
 import Partials.Header;
 
@@ -25,13 +26,17 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.Robot;
+import java.awt.AWTException;
 
 public class Register extends JFrame {
 
 	JFrame currentFrame;
 	private JPanel contentPane;
 	private ConfigController config = new ConfigController();
-	private UsersController usersController = new UsersController();
+	private RegisterController registerController = new RegisterController();
 	private JTextField nomeIn;
 	private JTextField emailIn;
 	private JPasswordField senhaIn;
@@ -152,6 +157,19 @@ public class Register extends JFrame {
 		panel_3.add(lblNewLabel_1);
 		
 		nomeIn = new JTextField();
+		nomeIn.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == 10) {
+					try {
+						Robot robot = new Robot();
+						robot.keyPress(KeyEvent.VK_TAB);
+					}catch(AWTException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		sl_panel_3.putConstraint(SpringLayout.NORTH, nomeIn, 35, SpringLayout.NORTH, panel_3);
 		sl_panel_3.putConstraint(SpringLayout.WEST, nomeIn, 145, SpringLayout.WEST, panel_3);
 		sl_panel_3.putConstraint(SpringLayout.SOUTH, nomeIn, 61, SpringLayout.NORTH, panel_3);
@@ -169,6 +187,19 @@ public class Register extends JFrame {
 		panel_3.add(lblNewLabel_1_1);
 		
 		emailIn = new JTextField();
+		emailIn.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == 10) {
+					try {
+						Robot robot = new Robot();
+						robot.keyPress(KeyEvent.VK_TAB);
+					}catch(AWTException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 		sl_panel_3.putConstraint(SpringLayout.NORTH, emailIn, 5, SpringLayout.SOUTH, lblNewLabel_1_1);
 		sl_panel_3.putConstraint(SpringLayout.WEST, emailIn, 145, SpringLayout.WEST, panel_3);
 		emailIn.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
@@ -185,6 +216,14 @@ public class Register extends JFrame {
 		panel_3.add(lblNewLabel_1_1_1);
 		
 		senhaIn = new JPasswordField();
+		senhaIn.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == 10) {
+					cadastrarBtn.doClick();
+				}
+			}
+		});
 		sl_panel_3.putConstraint(SpringLayout.WEST, senhaIn, 145, SpringLayout.WEST, panel_3);
 		sl_panel_3.putConstraint(SpringLayout.SOUTH, senhaIn, 31, SpringLayout.SOUTH, lblNewLabel_1_1_1);
 		sl_panel_3.putConstraint(SpringLayout.EAST, senhaIn, -126, SpringLayout.EAST, panel_3);
@@ -201,7 +240,7 @@ public class Register extends JFrame {
 					JOptionPane.showMessageDialog(null, "Alguns campos estão vazios, preencha-os!", "Cadastro", JOptionPane.WARNING_MESSAGE);
 				}else {					
 					// cadastra usuario
-					if(usersController.CadastraUser(nomeIn.getText(), emailIn.getText(), String.valueOf(senhaIn.getPassword()))) {
+					if(registerController.CadastraUser(nomeIn.getText(), emailIn.getText(), String.valueOf(senhaIn.getPassword()))) {
 						JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!", "Cadastro", JOptionPane.INFORMATION_MESSAGE);
 					}else {
 						JOptionPane.showMessageDialog(null, "Ocorreu um erro ao cadastrar, tente novamente.", "Cadastro", JOptionPane.INFORMATION_MESSAGE);
