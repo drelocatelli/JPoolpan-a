@@ -31,6 +31,7 @@ public class Register extends JFrame {
 	JFrame currentFrame;
 	private JPanel contentPane;
 	private ConfigController config = new ConfigController();
+	private UsersController usersController = new UsersController();
 	private JTextField nomeIn;
 	private JTextField emailIn;
 	private JPasswordField senhaIn;
@@ -198,9 +199,8 @@ public class Register extends JFrame {
 				// verifica campos vazios
 				if(nomeIn.getText().isEmpty() || emailIn.getText().isEmpty() || senhaIn.getPassword().equals("")) {
 					JOptionPane.showMessageDialog(null, "Alguns campos estão vazios, preencha-os!", "Cadastro", JOptionPane.WARNING_MESSAGE);
-				}else {
+				}else {					
 					// cadastra usuario
-					UsersController usersController = new UsersController();
 					if(usersController.CadastraUser(nomeIn.getText(), emailIn.getText(), String.valueOf(senhaIn.getPassword()))) {
 						JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!", "Cadastro", JOptionPane.INFORMATION_MESSAGE);
 					}else {

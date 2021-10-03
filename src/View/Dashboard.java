@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import Controller.ConfigController;
 import Controller.UsersController;
 import Partials.Header;
 import javax.swing.SpringLayout;
@@ -24,6 +25,7 @@ public class Dashboard extends JFrame {
 
 	private JPanel contentPane;
 	private UsersController user = new UsersController();
+	private ConfigController config = new ConfigController();
 
 	/**
 	 * Launch the application.
@@ -48,7 +50,7 @@ public class Dashboard extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 733, 539);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(34, 34, 255, 85));
+		contentPane.setBackground(config.defaultColor);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
@@ -90,6 +92,14 @@ public class Dashboard extends JFrame {
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setFont(new Font("Trebuchet MS", Font.PLAIN, 17));
 		contentPane.add(lblNewLabel);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(config.transparency);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, panel, 6, SpringLayout.SOUTH, lblNewLabel);
+		sl_contentPane.putConstraint(SpringLayout.WEST, panel, -23, SpringLayout.WEST, header);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, panel, -6, SpringLayout.NORTH, logoutBtn);
+		sl_contentPane.putConstraint(SpringLayout.EAST, panel, 0, SpringLayout.EAST, logoutBtn);
+		contentPane.add(panel);
 		
 	}
 }
