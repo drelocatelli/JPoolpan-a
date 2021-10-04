@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import Controller.ConfigController;
+import Controller.MoneyController;
 import Controller.UsersController;
 import Partials.Header;
 import javax.swing.SpringLayout;
@@ -20,6 +21,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -29,6 +32,7 @@ public class Dashboard extends JFrame {
 	private JPanel contentPane;
 	private UsersController user = new UsersController();
 	private ConfigController config = new ConfigController();
+	private MoneyController money = new MoneyController();
 
 	/**
 	 * Launch the application.
@@ -78,7 +82,6 @@ public class Dashboard extends JFrame {
 		logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		logoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
 				Main main = new Main();
 				currentFrame.dispose();
 				main.setVisible(true);
@@ -125,38 +128,61 @@ public class Dashboard extends JFrame {
 		SpringLayout sl_panel_1 = new SpringLayout();
 		panel_1.setLayout(sl_panel_1);
 		
-		JButton btnNewButton = new JButton("Recarregar");
-		btnNewButton.setFont(new Font("Verdana", Font.PLAIN, 11));
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton refreshBtn = new JButton("Recarregar");
+		refreshBtn.setFont(new Font("Verdana", Font.PLAIN, 11));
+		refreshBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				currentFrame.dispose();
 				Dashboard dashboard = new Dashboard(email, password);
 				dashboard.setVisible(true);
 			}
 		});
-		sl_panel_1.putConstraint(SpringLayout.NORTH, btnNewButton, 10, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, panel_1);
-		panel_1.add(btnNewButton);
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -6, SpringLayout.NORTH, panel);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, contentPane);
+		sl_panel_1.putConstraint(SpringLayout.NORTH, refreshBtn, 10, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.EAST, refreshBtn, -10, SpringLayout.EAST, panel_1);
+		panel_1.add(refreshBtn);
+		refreshBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, refreshBtn, -6, SpringLayout.NORTH, panel);
+		sl_contentPane.putConstraint(SpringLayout.EAST, refreshBtn, -10, SpringLayout.EAST, contentPane);
 		
 		JPanel panel_2 = new JPanel();
-		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 13, SpringLayout.SOUTH, btnNewButton);
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, panel_2, 13, SpringLayout.SOUTH, refreshBtn);
 		panel_2.setBackground(new Color(255,255,255,0));
 		sl_panel_1.putConstraint(SpringLayout.NORTH, panel_2, 10, SpringLayout.NORTH, panel_1);
-		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, -158, SpringLayout.WEST, btnNewButton);
-		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, -6, SpringLayout.WEST, btnNewButton);
+		sl_panel_1.putConstraint(SpringLayout.WEST, panel_2, -158, SpringLayout.WEST, refreshBtn);
+		sl_panel_1.putConstraint(SpringLayout.EAST, panel_2, -6, SpringLayout.WEST, refreshBtn);
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
 		
 		JButton btnDefinirSaldo = new JButton("Definir saldo");
+		btnDefinirSaldo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				var num = JOptionPane.showInputDialog("Digite um número sem pontuação");
+				
+				if(!num.isEmpty()) {
+					if(money.setMoney(email, password, num)) {
+						JOptionPane.showMessageDialog(null, "Valor atualizado com sucesso.", "Status", JOptionPane.INFORMATION_MESSAGE);
+						refreshBtn.doClick();
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "Número não pode ser nulo!", "Erro", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
 		btnDefinirSaldo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnDefinirSaldo.setIcon(new ImageIcon(getClass().getClassLoader().getResource("money_transfer.png")));
 		btnDefinirSaldo.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnDefinirSaldo.setBounds(10, 0, 142, 25);
 		btnDefinirSaldo.setFont(new Font("Verdana", Font.PLAIN, 11));
 		panel_2.add(btnDefinirSaldo);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(Color.YELLOW);
+		sl_panel_1.putConstraint(SpringLayout.NORTH, scrollPane, 38, SpringLayout.NORTH, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.WEST, scrollPane, 10, SpringLayout.WEST, panel_1);
+		sl_panel_1.putConstraint(SpringLayout.SOUTH, scrollPane, 650, SpringLayout.SOUTH, panel_2);
+		sl_panel_1.putConstraint(SpringLayout.EAST, scrollPane, -56, SpringLayout.WEST, panel_2);
+		panel_1.add(scrollPane);
 		
 	}
 }
