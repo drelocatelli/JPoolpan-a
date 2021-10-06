@@ -10,7 +10,7 @@ import Connections.Connect;
 
 public class MoneyController {
 	
-	public boolean setMoney(String email, String password, String money) {
+	public boolean setMoney(String email, String password, int newSaldo) {
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -22,7 +22,7 @@ public class MoneyController {
 			var query = "UPDATE users SET money=? WHERE email=? AND password=?";
 			preparedStmt = conn.prepareStatement(query);
 
-			preparedStmt.setString(1, String.valueOf(money));
+			preparedStmt.setString(1, String.valueOf(newSaldo));
 			preparedStmt.setString(2, String.valueOf(email));
 			preparedStmt.setString(3, String.valueOf(password));
 			preparedStmt.execute();
